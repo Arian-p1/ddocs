@@ -46,6 +46,7 @@ pub fn delete(key: String) {
 #[derive(Parser, Debug)]
 #[command(version = "0.9")]
 #[command(about = r#"
+    
       .o8        .o8
      "888       "888
  .oooo888   .oooo888   .ooooo.   .ooooo.   .oooo.o
