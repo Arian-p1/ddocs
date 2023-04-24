@@ -50,11 +50,17 @@ pub fn hashmap_to_json(map: HashMap<String, String>) -> io::Result<()> {
 
 pub fn json_to_hashmap() -> HashMap<String, String> {
     let st = fs::read_to_string(path().as_str()).unwrap();
-    let data: Vec<Data> = serde_json::from_str(&st).unwrap();
-
+    let data = serde_json::from_str::<Vec<Data>>(&st);
     let mut map = HashMap::new();
-    for item in data {
-        map.insert(item.key, item.value);
+
+    match data {
+        Ok(a) => {
+            for item in a {
+                map.insert(item.key, item.value);
+            }
+        }
+        Err(_) => {}
     }
+
     map
 }

@@ -43,12 +43,19 @@ pub fn delete(key: String) {
     println!("the topic is deleted");
 }
 
-///ddcos
-///author arian ahmadi <ahmadiarian981@gmail.com>
-///save docs wit ddocs and feel relief
-///because i compress your data so you can enjoy from more space
 #[derive(Parser, Debug)]
 #[command(version = "0.9")]
+#[command(about = r#"
+      .o8        .o8
+     "888       "888
+ .oooo888   .oooo888   .ooooo.   .ooooo.   .oooo.o
+d88' `888  d88' `888  d88' `88b d88' `"Y8 d88(  "8
+888   888  888   888  888   888 888       `"Y88b.
+888   888  888   888  888   888 888   .o8 o.  )88b
+`Y8bod88P" `Y8bod88P" `Y8bod8P' `Y8bod8P' 8""888P'
+
+
+    "#)]
 struct Cli {
     /// search the topic you saved
     #[clap(short, long, required(false))]
