@@ -1,10 +1,10 @@
 use crate::compress::*;
 use serde::{Deserialize, Serialize};
-use serde_json::{Result, Value};
+use serde_json::{json, Map, Result, Value};
 use std::{
     collections::HashMap,
     fs::{self, File},
-    io,
+    io::{self, BufWriter},
     path::Path,
 };
 
@@ -14,7 +14,7 @@ struct Data {
     value: String,
 }
 
-fn path() -> String {
+pub fn path() -> String {
     let home = match std::env::home_dir() {
         Some(a) => a.to_owned(),
         _ => panic!("not fount path"),
@@ -28,23 +28,22 @@ fn path() -> String {
 fn file() -> std::result::Result<File, io::Error> {
     let conf_dir = path();
     let a = Path::new(&conf_dir);
-    let file = if !a.exists() {
-        fs::create_dir_all(a.parent().unwrap()).unwrap();
-        File::create(&conf_dir)?;
-        File::options().read(true).write(true).open(&conf_dir)?
-    } else {
-        File::options().read(true).write(true).open(&conf_dir)?
-    };
-    Ok(file)
+    let file = File::options().read(true).write(true).open(&conf_dir);
+    file
 }
 
-// haminja file ro write kon bere
-pub fn hashmap_to_json(map: HashMap<String, String>) -> Result<()> {
-    let data: Vec<Data> = map
-        .into_iter()
-        .map(|(k, v)| Data { key: k, value: v })
-        .collect();
-    let json = serde_json::to_string(&data)?;
+/// it will also write the json into config file
+pub fn hashmap_to_json(map: HashMap<String, String>) -> io::Result<()> {
+    let writer = BufWriter::new(file().unwrap());
+
+    serde_json::to_writer_pretty(
+        writer,
+        &Value::Array(
+            map.into_iter()
+                .map(|(key, value)| json!({"key": key, "value": value}))
+                .collect(),
+        ),
+    )?;
 
     Ok(())
 }

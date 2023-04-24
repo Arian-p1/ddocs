@@ -6,11 +6,12 @@ pub fn compresse(v: &str) -> String {
     let mut encoder = ZlibEncoder::new(Vec::new(), Compression::default());
     encoder.write_all(val).unwrap();
     let compressed_val = encoder.finish().unwrap();
-    String::from_utf8(compressed_val).unwrap()
+    base64::encode(&compressed_val)
 }
 
 pub fn decompress(v: String) -> String {
-    let mut decoder = ZlibDecoder::new(Cursor::new(v.as_bytes()));
+    let compressed_val = base64::decode(v).unwrap();
+    let mut decoder = ZlibDecoder::new(Cursor::new(&compressed_val));
     let mut decompressed_bytes = Vec::new();
     decoder.read_to_end(&mut decompressed_bytes).unwrap();
     String::from_utf8(decompressed_bytes).unwrap()
