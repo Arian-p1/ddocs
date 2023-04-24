@@ -1,4 +1,5 @@
 # ddocs
+```
 
       .o8        .o8
      "888       "888
@@ -7,7 +8,7 @@ d88' `888  d88' `888  d88' `88b d88' `"Y8 d88(  "8
 888   888  888   888  888   888 888       `"Y88b.
 888   888  888   888  888   888 888   .o8 o.  )88b
 `Y8bod88P" `Y8bod88P" `Y8bod8P' `Y8bod8P' 8""888P'
-
+```
 
 ## About
 Simple cli tool to save and show your text docs
@@ -23,7 +24,8 @@ and i guess i should say its fast :)
 just clone the repo and run 
 ```sh
 cargo build --release
-mv target/release/ddocs /usr/bin/```
+mv target/release/ddocs /usr/bin/
+```
 
 Also it dosent work on windows
 
