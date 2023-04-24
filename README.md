@@ -30,7 +30,7 @@ mv target/release/ddocs /usr/bin/
 Also it dosent work on windows
 
 ## Document
-
+```
 Usage: ddocs [OPTIONS]
 
 Options:
@@ -41,5 +41,4 @@ Options:
   -d, --delete <DELETE>  delete the topic
   -h, --help             Print help
   -V, --version          Print version
-
-
+```
