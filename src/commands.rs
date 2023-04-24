@@ -1,9 +1,10 @@
 use crate::{compress::*, serdef::*};
 use clap::Parser;
+use std::io::{self, BufRead};
 
 fn input() -> String {
     let mut ii = String::new();
-    std::io::stdin().read_line(&mut ii).unwrap();
+    io::stdin().lock().read_line(&mut ii).unwrap();
     ii
 }
 
@@ -46,7 +47,7 @@ pub fn delete(key: String) {
 #[derive(Parser, Debug)]
 #[command(version = "0.9")]
 #[command(about = r#"
-    
+
       .o8        .o8
      "888       "888
  .oooo888   .oooo888   .ooooo.   .ooooo.   .oooo.o
