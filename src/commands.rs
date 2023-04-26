@@ -79,15 +79,15 @@ struct Cli {
 
 pub fn run() {
     let args = Cli::parse();
-    // if let Some(key) = args.search {
-    //     search(key);
-    // } else if let Some(key) = args.add {
-    //     add(key);
-    // } else if let Some(key) = args.cat {
-    //     cat(key);
-    // } else if let Some(key) = args.edit {
-    //     edit(key);
-    // } else if let Some(key) = args.delete {
-    //     delete(key);
-    // }
+     if let Some(key) = args.search {
+         search(key);
+     } else if let Some(key) = args.add {
+         add(key);
+     } else if let Some(key) = args.cat {
+         cat(key);
+     } else if let Some(key) = args.edit {
+         edit(key);
+     } else if let Some(key) = args.delete {
+         delete(key);
+     }
 }
