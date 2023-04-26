@@ -11,8 +11,8 @@ fn input() -> String {
 // key is the topic we want to search
 pub fn search(key: String) {
     let mut map = json_to_hashmap();
-    for key in map.keys() {
-        if key.contains(key) {
+    for k in map.keys() {
+        if key.contains(k) {
             println!("Result: {}\n", key);
         }
     }
@@ -79,15 +79,15 @@ struct Cli {
 
 pub fn run() {
     let args = Cli::parse();
-    if let Some(key) = args.search {
-        search(key);
-    } else if let Some(key) = args.add {
-        add(key);
-    } else if let Some(key) = args.cat {
-        cat(key);
-    } else if let Some(key) = args.edit {
-        edit(key);
-    } else if let Some(key) = args.delete {
-        delete(key);
-    }
+    // if let Some(key) = args.search {
+    //     search(key);
+    // } else if let Some(key) = args.add {
+    //     add(key);
+    // } else if let Some(key) = args.cat {
+    //     cat(key);
+    // } else if let Some(key) = args.edit {
+    //     edit(key);
+    // } else if let Some(key) = args.delete {
+    //     delete(key);
+    // }
 }

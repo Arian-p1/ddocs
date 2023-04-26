@@ -20,8 +20,7 @@ pub fn path() -> String {
         _ => panic!("not fount path"),
     };
 
-    let conf_dir = home.to_str().unwrap().to_owned() + "/.config/ddocs/ddocs.json";
-    conf_dir
+    home.to_str().unwrap().to_owned() + "/.config/ddocs/ddocs.json"
 }
 
 // make path if not exist then open file
