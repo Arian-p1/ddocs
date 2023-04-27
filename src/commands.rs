@@ -80,7 +80,6 @@ struct Cli {
 
 pub fn run() {
     let args = Cli::parse();
-
     match args {
         Cli {
             search: Some(val), ..
