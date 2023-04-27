@@ -1,4 +1,3 @@
-use crate::compress::*;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Map, Result, Value};
 use std::{
@@ -55,10 +54,12 @@ pub fn json_to_hashmap() -> HashMap<String, String> {
     match data {
         Ok(a) => {
             for item in a {
-                map.insert(item.key, item.value);
+                map.insert(item.key, item.value.into());
             }
         }
-        Err(_) => {}
+        Err(_) => {
+            println!("unable to read file");
+        }
     }
 
     map

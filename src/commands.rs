@@ -1,4 +1,5 @@
-use crate::{compress::*, serdef::*};
+use crate::compress::{compress, decompress};
+use crate::serdef::*;
 use clap::Parser;
 use std::io::{self, BufRead};
 
@@ -13,7 +14,7 @@ pub fn search(key: String) {
     let mut map = json_to_hashmap();
     for k in map.keys() {
         if key.contains(k) {
-            println!("Result: {}\n", key);
+            println!("Result: {}", key);
         }
     }
 }
@@ -21,14 +22,14 @@ pub fn search(key: String) {
 pub fn add(key: String) {
     let value = input();
     let mut map = json_to_hashmap();
-    map.insert(key, compresse(&value));
+    map.insert(key, compress(&value));
     hashmap_to_json(map);
 }
 
 pub fn cat(key: String) {
     let mut map = json_to_hashmap();
     if let Some(value) = map.get(&key) {
-        println!("{}", decompress(value.to_owned()));
+        println!("{}", decompress(&value));
     } else {
         println!("there is no topic with this name");
     }
@@ -79,15 +80,32 @@ struct Cli {
 
 pub fn run() {
     let args = Cli::parse();
-    // if let Some(key) = args.search {
-    //     search(key);
-    // } else if let Some(key) = args.add {
-    //     add(key);
-    // } else if let Some(key) = args.cat {
-    //     cat(key);
-    // } else if let Some(key) = args.edit {
-    //     edit(key);
-    // } else if let Some(key) = args.delete {
-    //     delete(key);
-    // }
+
+    match args {
+        Cli {
+            search: Some(val), ..
+        } => {
+            println!("searching...");
+            search(val);
+        }
+        Cli { add: Some(val), .. } => {
+            println!("write your doc");
+            add(val);
+        }
+        Cli { cat: Some(val), .. } => {
+            cat(val);
+        }
+        Cli {
+            edit: Some(val), ..
+        } => {
+            edit(val);
+        }
+        Cli {
+            delete: Some(val), ..
+        } => {
+            delete(val);
+        }
+
+        _ => println!("give me an option \nto see options use -h or --help"),
+    }
 }

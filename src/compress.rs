@@ -1,18 +1,18 @@
-use flate2::{read::ZlibDecoder, write::ZlibEncoder, Compression};
-use std::io::{self, Cursor, Read, Write};
+use base64::{decode, encode};
+use bytes::BytesMut;
+use flate2::{read::DeflateDecoder, write::DeflateEncoder, Compression};
+use std::io::{Read, Write};
 
-pub fn compresse(v: &str) -> String {
-    let val = v.as_bytes();
-    let mut encoder = ZlibEncoder::new(Vec::new(), Compression::default());
-    encoder.write_all(val).unwrap();
-    let compressed_val = encoder.finish().unwrap();
-    base64::encode(&compressed_val)
+pub fn compress(input: &str) -> String {
+    let mut encoder = DeflateEncoder::new(Vec::new(), Compression::default());
+    encoder.write_all(input.as_bytes()).unwrap();
+    let compressed_data = encoder.finish().unwrap();
+    encode(&compressed_data)
 }
-
-pub fn decompress(v: String) -> String {
-    let compressed_val = base64::decode(v).unwrap();
-    let mut decoder = ZlibDecoder::new(Cursor::new(&compressed_val));
-    let mut decompressed_bytes = Vec::new();
-    decoder.read_to_end(&mut decompressed_bytes).unwrap();
-    String::from_utf8(decompressed_bytes).unwrap()
+pub fn decompress(compressed_data: &str) -> String {
+    let decoded_data = decode(compressed_data).unwrap();
+    let mut decoder = DeflateDecoder::new(&decoded_data[..]);
+    let mut decompressed_data = Vec::new();
+    decoder.read_to_end(&mut decompressed_data).unwrap();
+    String::from_utf8(decompressed_data).unwrap()
 }
