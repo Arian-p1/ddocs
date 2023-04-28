@@ -1,12 +1,38 @@
 use crate::compress::{compress, decompress};
 use crate::serdef::*;
 use clap::Parser;
-use std::io::{self, BufRead};
+use std::io::{self, stdin, stdout, BufRead, Write};
+use termion::{event::Key, input::TermRead, raw::IntoRawMode};
 
 fn input() -> String {
-    let mut ii = String::new();
-    io::stdin().lock().read_line(&mut ii).unwrap();
-    ii
+    println!("enter your string and \npress C-s to save your string\n \n");
+    let stdin = stdin();
+    let mut stdout = stdout().into_raw_mode().unwrap();
+    let mut input = stdin.keys();
+    let mut input_str = String::new();
+
+    loop {
+        if let Some(Ok(key)) = input.next() {
+            match key {
+                Key::Ctrl('s') => {
+                    break;
+                }
+                Key::Char(c) => {
+                    input_str.push(c);
+                    write!(stdout, "{}", c).unwrap();
+                    stdout.flush().unwrap();
+                }
+                Key::Backspace => {
+                    input_str.pop();
+                    write!(stdout, "\x08 \x08").unwrap();
+                    stdout.flush().unwrap();
+                }
+                _ => {}
+            }
+        }
+    }
+
+    input_str
 }
 
 // key is the topic we want to search
