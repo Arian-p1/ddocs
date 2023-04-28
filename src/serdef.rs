@@ -15,7 +15,7 @@ struct Data {
 
 pub fn path() -> String {
     let home = match std::env::home_dir() {
-        Some(a) => a.to_owned(),
+        Some(a) => a,
         _ => panic!("not fount path"),
     };
 
@@ -54,7 +54,7 @@ pub fn json_to_hashmap() -> HashMap<String, String> {
     match data {
         Ok(a) => {
             for item in a {
-                map.insert(item.key, item.value.into());
+                map.insert(item.key, item.value);
             }
         }
         Err(_) => {

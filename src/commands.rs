@@ -4,12 +4,22 @@ use clap::Parser;
 use std::io::{self, stdin, stdout, BufRead, Write};
 use termion::{event::Key, input::TermRead, raw::IntoRawMode};
 
-fn input() -> String {
-    println!("enter your string and \npress C-s to save your string\n \n");
+// for_editing string is for when we want use it for edit option
+fn input(for_editing: Option<String>) -> String {
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
     let mut input = stdin.keys();
-    let mut input_str = String::new();
+    let mut input_str = match for_editing {
+        Some(a) => {
+            println!("Edit your doc\npress C-s to save your string\n");
+            write!(stdout, "{}", a).unwrap();
+            a
+        }
+        None => {
+            println!("Write your doc\npress C-s to save your string\n");
+            String::new()
+        }
+    };
 
     loop {
         if let Some(Ok(key)) = input.next() {
@@ -25,6 +35,32 @@ fn input() -> String {
                 Key::Backspace => {
                     input_str.pop();
                     write!(stdout, "\x08 \x08").unwrap();
+                    stdout.flush().unwrap();
+                }
+                Key::Char('\n') => {
+                    input_str.push('\n');
+                    write!(stdout, "\n").unwrap();
+                    stdout.flush().unwrap();
+                }
+                Key::Char('\t') => {
+                    input_str.push('\t');
+                    write!(stdout, "\t").unwrap();
+                    stdout.flush().unwrap();
+                }
+                Key::Up => {
+                    write!(stdout, "{}", termion::cursor::Up(1)).unwrap();
+                    stdout.flush().unwrap();
+                }
+                Key::Down => {
+                    write!(stdout, "{}", termion::cursor::Down(1)).unwrap();
+                    stdout.flush().unwrap();
+                }
+                Key::Left => {
+                    write!(stdout, "{}", termion::cursor::Left(1)).unwrap();
+                    stdout.flush().unwrap();
+                }
+                Key::Right => {
+                    write!(stdout, "{}", termion::cursor::Right(1)).unwrap();
                     stdout.flush().unwrap();
                 }
                 _ => {}
@@ -46,7 +82,7 @@ pub fn search(key: String) {
 }
 
 pub fn add(key: String) {
-    let value = input();
+    let value = input(None);
     let mut map = json_to_hashmap();
     map.insert(key, compress(&value));
     hashmap_to_json(map);
@@ -55,14 +91,21 @@ pub fn add(key: String) {
 pub fn cat(key: String) {
     let mut map = json_to_hashmap();
     if let Some(value) = map.get(&key) {
-        println!("{}", decompress(&value));
+        println!("{}", decompress(value));
     } else {
         println!("there is no topic with this name");
     }
 }
 
-// TODO
-pub fn edit(key: String) {}
+pub fn edit(key: String) {
+    let mut map = json_to_hashmap();
+    let mut value = map.get(&key).expect("the topic dosent exist");
+    let input = input(Some(decompress(value)));
+    if let Some(x) = map.get_mut(&key) {
+        *x = compress(&input);
+    }
+    hashmap_to_json(map);
+}
 
 pub fn delete(key: String) {
     let mut map = json_to_hashmap();
