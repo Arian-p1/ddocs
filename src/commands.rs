@@ -1,36 +1,25 @@
 use crate::compress::{compress, decompress};
 use crate::serdef::*;
 use clap::Parser;
-use std::io::{self, stdin, stdout, BufRead, Write};
-use termion::{event::Key, input::TermRead, raw::IntoRawMode};
+use std::io::{self, stdin, stdout, BufRead, Read, Write};
+use termion::{cursor::DetectCursorPos, event::Key, input::TermRead, raw::IntoRawMode};
 
 // for_editing string is for when we want use it for edit option
 fn input(for_editing: Option<String>) -> String {
+    println!("Write or Edit your doc\npress C-s to save your string\n");
     let stdin = stdin();
     let mut stdout = stdout().into_raw_mode().unwrap();
     let mut input = stdin.keys();
-    let mut input_str = match for_editing {
-        Some(a) => {
-            println!("Edit your doc\npress C-s to save your string\n");
-            write!(stdout, "{}", a).unwrap();
-            a
-        }
-        None => {
-            println!("Write your doc\npress C-s to save your string\n");
-            String::new()
-        }
-    };
-
+    let mut input_str = String::new();
+    if let Some(s) = for_editing {
+        input_str.push_str(&s);
+        write!(stdout, "{}", input_str).unwrap();
+    }
     loop {
         if let Some(Ok(key)) = input.next() {
             match key {
                 Key::Ctrl('s') => {
                     break;
-                }
-                Key::Char(c) => {
-                    input_str.push(c);
-                    write!(stdout, "{}", c).unwrap();
-                    stdout.flush().unwrap();
                 }
                 Key::Backspace => {
                     input_str.pop();
@@ -39,12 +28,20 @@ fn input(for_editing: Option<String>) -> String {
                 }
                 Key::Char('\n') => {
                     input_str.push('\n');
-                    write!(stdout, "\n").unwrap();
+                    write!(stdout, "\r\n").unwrap();
+                    // let (x, y) = stdout.cursor_pos().unwrap();
+                    // write!(stdout, "{}", termion::cursor::Goto(1, y + 1));
                     stdout.flush().unwrap();
+                    // println!("{:?}", stdout.cursor_pos().unwrap());
                 }
                 Key::Char('\t') => {
                     input_str.push('\t');
                     write!(stdout, "\t").unwrap();
+                    stdout.flush().unwrap();
+                }
+                Key::Char(c) => {
+                    input_str.push(c);
+                    write!(stdout, "{}", c).unwrap();
                     stdout.flush().unwrap();
                 }
                 Key::Up => {
@@ -66,6 +63,7 @@ fn input(for_editing: Option<String>) -> String {
                 _ => {}
             }
         }
+        drop(&stdout);
     }
 
     input_str

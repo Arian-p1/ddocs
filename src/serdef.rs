@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{json, Map, Result, Value};
 use std::{
     collections::HashMap,
-    fs::{self, File},
+    fs::{self, File, OpenOptions},
     io::{self, BufWriter},
     path::Path,
 };
@@ -25,12 +25,14 @@ pub fn path() -> String {
 // make path if not exist then open file
 fn file() -> std::result::Result<File, io::Error> {
     let conf_dir = path();
-    let a = Path::new(&conf_dir);
-    let file = File::options().read(true).write(true).open(&conf_dir);
-    file
+    OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .create(true)
+        .open(&conf_dir)
 }
 
-/// it will also write the json into config file
+// it will also write the json into config file
 pub fn hashmap_to_json(map: HashMap<String, String>) -> io::Result<()> {
     let writer = BufWriter::new(file().unwrap());
 
