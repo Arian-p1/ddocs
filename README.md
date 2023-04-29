@@ -18,6 +18,10 @@ because it will compress your data so you can enjoy from more space
 
 and i guess i should say its fast :)
 
+this is how i save docs for you
+![cat](https://github.com/Arian-p1/ddocs/blob/master/cat.png?raw=true)
+![show-json-conf](https://github.com/Arian-p1/ddocs/blob/master/show-conf.png?raw=true)
+
 
 ## Install
 
