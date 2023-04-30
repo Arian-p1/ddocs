@@ -7,6 +7,7 @@ use std::{
 
 mod commands;
 mod compress;
+mod editor;
 mod serdef;
 
 /*

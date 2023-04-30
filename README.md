@@ -13,7 +13,7 @@ d88' `888  d88' `888  d88' `88b d88' `"Y8 d88(  "8
 ## About
 Simple cli tool to save and show your text docs
 
-save docs wit ddocs and feel relief
+save docs with ddocs and feel relief
 because it will compress your data so you can enjoy from more space
 
 and i guess i should say its fast :)
@@ -25,7 +25,7 @@ this is how i save docs for you
 
 ## Install
 
-just clone the repo and run 
+just clone the repo and run
 ```sh
 cargo build --release
 mv target/release/ddocs /usr/bin/

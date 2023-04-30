@@ -14,6 +14,7 @@ struct Data {
 }
 
 pub fn path() -> String {
+    #[allow(deprecated)]
     let home = match std::env::home_dir() {
         Some(a) => a,
         _ => panic!("not fount path"),
