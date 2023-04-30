@@ -21,7 +21,7 @@ pub fn editor(for_edit: Option<String>) -> io::Result<String> {
     textarea.set_block(
         Block::default()
             .borders(Borders::ALL)
-            .title("Write or edit your doc"),
+            .title("Write or edit your doc >>> exit with Esc"),
     );
 
     if let Some(ref stri) = for_edit {
