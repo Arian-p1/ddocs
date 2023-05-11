@@ -1,6 +1,7 @@
 use crate::compress::{compress, decompress};
 use crate::editor::editor as input;
 use crate::serdef::*;
+use bat::{Input, PagingMode, PrettyPrinter};
 use clap::Parser;
 use std::io::{self, stdin, stdout, BufRead, Read, Write};
 
@@ -24,7 +25,17 @@ pub fn add(key: String) {
 pub fn cat(key: String) {
     let mut map = json_to_hashmap();
     if let Some(value) = map.get(&key) {
-        println!("{}", decompress(value));
+        let value_byte = decompress(value);
+        PrettyPrinter::new()
+            .header(true)
+            .grid(true)
+            .line_numbers(true)
+            .use_italics(true)
+            .language("md")
+            .paging_mode(PagingMode::QuitIfOneScreen)
+            .input(Input::from_bytes(value_byte.as_bytes()))
+            .print()
+            .unwrap();
     } else {
         println!("there is no topic with this name");
     }
